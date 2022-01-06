@@ -1,0 +1,10 @@
+---
+- name: Ensure {{ rpo_path }} dir Exist
+  win_file:
+    path: '{{rpo_path}}'
+    state: directory
+
+- name: Copy RPO File
+  win_copy:
+    src: tttm120.rpo
+    dest: '{{ rpo_path }}\tttm120.rpo'

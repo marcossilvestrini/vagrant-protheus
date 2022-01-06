@@ -1,0 +1,169 @@
+---
+paths:
+    - '{{ appserver_path }}/lockserver'
+    - '{{ appserver_path }}/broker'
+    - '{{ appserver_path }}/slave01'
+    - '{{ appserver_path }}/slave02'
+    - '{{ appserver_path }}/soap'
+    - '{{ appserver_path }}/rest'
+
+bin_name:
+    - app_lockserver
+    - app_broker
+    - app_slave01
+    - app_slave02
+    - app_soap
+    - app_rest
+
+scripts:
+    - totvslockserver.j2
+    - totvslave01.j2
+    - totvslave02.j2
+    - tovsbroker.j2
+    - totvssoap.j2
+    - totvsrest.j2
+
+# Broker
+broker_tcp: 7030
+broker_name: protheus_broker
+broker_displayname: protheus_broker
+broker_description: protheus_broker
+broker_consoleFile: '{{logs}}/{{ broker_name }}.log'
+broker_latencyLogFile: '{{logs}}/latency_{{ broker_name }}.log'
+
+# slave01
+slave01_port: 7031
+slave01_http_port: 7131
+slave01_name: protheus_slave01
+slave01_displayname: protheus_slave01
+slave01_description: protheus_slave01
+slave01_consoleFile: '{{logs}}/{{ slave01_name }}.log'
+slave01_latencyLogFile: '{{logs}}/latency_{{ slave01_name }}.log'
+slave01_LogProfilerPath: '{{logs}}/logprofiler_{{ slave01_name }}.log'
+
+# slave02
+slave02_port: 7032
+slave02_http_port: 7132
+slave02_name: protheus_slave02
+slave02_displayname: protheus_slave02
+slave02_description: protheus_slave02
+slave02_consoleFile: '{{logs}}/{{ slave02_name }}.log'
+slave02_latencyLogFile: '{{logs}}/latency_{{ slave02_name }}.log'
+slave02_LogProfilerPath: '{{logs}}/logprofiler_{{ slave02_name }}.log'
+
+# Rest
+rest_tcp_port: 7033
+rest_port: 7133
+rest_http_port: 7233
+rest_name: protheus_rest
+rest_displayname: protheus_rest
+rest_description: protheus_rest
+rest_consoleFile: '{{logs}}/{{ rest_name }}.log'
+rest_latencyLogFile: '{{logs}}/latency_{{ rest_name }}.log'
+rest_LogProfilerPath: '{{logs}}/logprofiler_{{ rest_name }}.log'
+rest_url: '/rest'
+rest_prepare_in: ALL
+rest_instances: '2,5,1,1'
+
+# soap
+soap_tcp_port: 7034
+soap_port: 7134
+soap_http_port: 7234
+soap_name: protheus_soap
+soap_displayname: protheus_soap
+soap_description: protheus_soap
+soap_consoleFile: '{{logs}}/{{ soap_name }}.log'
+soap_latencyLogFile: '{{logs}}/latency_{{ soap_name }}.log'
+soap_LogProfilerPath: '{{logs}}/logprofiler_{{ soap_name }}.log'
+soap_instances: '2,5,1,1'
+
+# Vars Appserver.ini Default
+
+## [Environment]
+StartPath: /system/
+local_files: CTREE
+localdbextension: .dtc
+rpodb: Top
+rpolanguage: multi
+RegionalLanguage: BRA
+rpoversion: 120
+ThreadMemWarning: 1000
+ThreadMemStep: 100
+KillStack: 1
+Trace: 0
+TOPMemoMega: 1
+TraceStack: 1
+MaxLocks: 10000
+AdvSQLReplay: 0
+AdvSQLReplayLog: 0
+AdvSQLReplayPath: '/SQLReplay/'
+AdvSQLReplayIOP: 0
+AdvSQLReplayLogMaxSize: 536870912
+StartSysInDB: 1
+
+
+## [DBAccess]
+DBAccessServer: '{{ dbaccess_ip }}'
+Database: '{{ database }}'
+Alias: '{{ alias }}'
+Driver: dbapi.so
+MemoMega: 1
+
+## [Drivers]
+MultiProtocolPort: 1
+MultiProtocolPortSecure: 1
+Secure: SSL
+
+## [lockserver]
+lockserverEnable: 0
+lockserverSecureConnection: 0
+lockserverMessageLog: 1
+
+## [TCP]
+Type: TCPIP
+
+## [General]
+ConsoleLog: 1
+ChangeEncodingBehavior: 0
+InactiveTimeout: 300
+CanAcceptDebugger: 1
+CanAcceptLB: 1
+CanAcceptMonitor: 1
+CanRunJobs: 1
+CanAcceptRPC: 1
+DebugThreadUsedMemory: 1
+FloatingPointPrecise: 0
+IdeMessages: 0
+LogTimeStamp : 1
+ShowFullLog: 0
+ShowIPClient: 0
+SocketMessages: 0
+SSLRedirect: 0
+LatencyLog: 0
+LogHttpFuncs:  0
+MaxStringSize: 10
+WsdlStreamType: 0
+SocketsDefaultIPV6: 0
+ServerMemoryLimit: 1024
+InstallPath: app_path
+
+## [TDS]
+ALLOWAPPLYPATCH: '{{ ip_developer }}'
+ALLOWEDIT: '{{ ip_developer }}'
+ENABLEDISCONNECTUSER: '{{ ip_developer }}'
+ENABLESENDMESSAGE: '{{ ip_developer }}'
+ENABLEBLOCKNEWCONNECTION: '{{ ip_developer }}'
+ENABLESTOPSERVER: '{{ ip_developer }}'
+
+## [APP_MONITOR]
+enable_monitor: 1
+
+## [update]
+enable_update: 1
+
+## [WEBAPP]
+EnvServer: '{{environment_name}}'
+LastMainProg: 'SIGAADV,SIGAMDI,SIGACFG,SRVWIZARD'
+MaxBodySize: 10485760
+MaxHeaderSize: 1024
+MaxRequestTime: 30

@@ -1,0 +1,21 @@
+---
+# Remove Services
+- include_tasks: del_services.yml
+
+# Create Appserver Paths
+- include_tasks: paths.yml
+
+# Managment Appserver Files
+- include_tasks: files.yml
+
+# Set .ini Appservers Files
+- include_tasks: inis.yml
+
+# Set Bin Appserver Files
+- include_tasks: bin.yml
+
+# Create Services
+- include_tasks: create_services.yml
+
+# Up Stack
+- include_tasks: up_stack.yml

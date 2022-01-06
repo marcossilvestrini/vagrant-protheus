@@ -1,0 +1,51 @@
+---
+- name: Create Broker service
+  win_shell: |
+    cd '{{ broker_path }}'
+    & .\appserver_broker.exe -balance_smart_client_desktop -i
+    $filter = 'Name=' + "'" + '{{ broker_name }}' + "'" + ''
+    $service = Get-WMIObject -class Win32_Service -Filter $filter
+
+- name: Set the log on user to a '{{ user }}' in account Broker service
+  win_service:
+    name: '{{ broker_name}}'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+- name: Create Slave01 Service
+  win_service:
+    name: '{{ slave01_name }}'
+    path: '{{ slave01_path }}\appserver_slave01.exe'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+- name: Create Slave02 Service
+  win_service:
+    name: '{{ slave02_name }}'
+    path: '{{ slave02_path }}\appserver_slave02.exe'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+- name: Create Soap Service
+  win_service:
+    name: '{{ soap_name }}'
+    path: '{{ soap_path }}\appserver_soap.exe'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+- name: Create Rest Service
+  win_service:
+    name: '{{ rest_name }}'
+    path: '{{ rest_path }}\appserver_rest.exe'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'

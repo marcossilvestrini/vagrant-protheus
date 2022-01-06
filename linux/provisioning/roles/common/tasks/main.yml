@@ -1,0 +1,21 @@
+---
+- name: Install Commons Packages
+  dnf:
+    name: '{{ item }}'
+    state: latest
+  loop:
+    - '{{ common_packages }}'
+  become: yes
+
+- name: Create Commons Paths (logs, update)
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop: '{{ paths }}'
+
+- name: Set timezone to America/Sao_Paulo
+  timezone:
+    name: America/Sao_Paulo

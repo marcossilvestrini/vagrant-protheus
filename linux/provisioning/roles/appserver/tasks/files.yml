@@ -1,0 +1,43 @@
+---
+- name: Copy Appserver Base File
+  copy:
+    src: appserver.tar.gz
+    dest: '{{ appserver_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Extract Appserver Files
+  unarchive:
+    src: '{{ appserver_path }}/appserver.tar.gz'
+    dest: '{{ item }}'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    remote_src: yes
+  loop:
+    '{{ paths }}'
+
+- name: Copy Webapp file
+  copy:
+    src: webapp.so
+    dest: '{{ item }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop:
+    '{{ paths }}'
+
+- name: Copy Script for Maintenance(Stop,Start,Restart, Status)
+  template:
+    src: '{{ item }}'
+    dest: "{{ script_path}}/{{ item.replace('.j2','') }}"
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: 0775
+  with_items:
+    - '{{ scripts }}'
+
+- name: Clear Appserver Files
+  file:
+    path: '{{ appserver_path }}/appserver.tar.gz'
+    state: absent

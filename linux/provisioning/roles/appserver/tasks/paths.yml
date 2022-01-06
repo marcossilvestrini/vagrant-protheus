@@ -1,0 +1,19 @@
+---
+- name: Create Appserver Base Path
+  file:
+    path: "{{ appserver_path }}"
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  become: yes
+
+- name: Create Appservers Paths (lockserver, broker, slaves, ws)
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop: '{{ paths }}'
+  become: yes

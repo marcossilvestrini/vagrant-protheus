@@ -1,0 +1,23 @@
+#ignore files general
+**/.vscode
+**/.log
+**/.vagrant
+workspace.code-vagrant-protheus.code-workspace
+
+#security
+**/authorized_keys
+**/*.pub
+**/*.ppk
+**/pk_protheus
+**/private_key
+
+#erp
+**/provisioning/**/*.rpo
+**/provisioning/**/*.zip*
+**/provisioning/**/*.tar.gz*
+**/provisioning/**/*.so*
+
+# rules postgresql
+**/*.retry
+**/*/__pycache__
+**/*.pyc

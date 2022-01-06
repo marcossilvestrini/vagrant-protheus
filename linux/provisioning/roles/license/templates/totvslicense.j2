@@ -1,0 +1,331 @@
+#ckconfig: 2345 84 10
+
+#description: Starts and stops program
+
+#################################
+
+# CONFIGURACAO DO SERVICO #
+
+#################################
+
+#Inserir o nome do executavel
+
+prog="app_license"
+
+#Inserir o caminho do diretorio do executavel
+
+pathbin={{license_appserver_path}}
+
+#################################
+
+# Configuracao de ULIMIT #
+
+#################################
+
+#open files - (-n)
+
+openFiles=65536
+
+#stack size - (kbytes, -s)
+
+stackSize=1024
+
+#core file size - (blocks, -c)
+
+coreFileSize=unlimited
+
+#file size - (blocks, -f)
+
+fileSize=unlimited
+
+#cpu time - (seconds, -t)
+
+cpuTime=unlimited
+
+#virtual memory - (-v)
+
+virtualMemory=unlimited
+
+#########################
+
+# FIM DA CONFIGURACAO #
+
+#########################
+
+#Caminho absoluto do executavel
+
+progbin="${pathbin}/${prog}"
+
+#Caminho absoluto do arquivo .pid
+
+pidfile="/var/run/${prog}.pid"
+
+#Caminho absoluto do arquilo de lock
+
+lockfile="/var/lock/subsys/${prog}"
+
+#Caminho absoluto do arquivo de log (script)
+
+logfile="${pathbin}/log_${prog}.log"
+
+#Source function library.
+
+functions="/etc/init.d/functions"
+
+if [ -e ${functions} ] ; then
+
+. /etc/init.d/functions
+
+else
+
+echo "$functions not installed"
+
+exit 5
+
+fi
+
+RETVAL=0
+
+#Verifica se o executavel tem permissao correta e se esta acessivel
+
+test -x $progbin || { echo "$progbin not installed";
+
+        if [ "$1" = "stop" ]; then exit 0;
+
+        else exit 5; fi; }
+
+#Prepara as ulimit para o servico
+
+ulimit -n ${openFiles}
+
+ulimit -s ${stackSize}
+
+ulimit -c ${coreFileSize}
+
+ulimit -f ${fileSize}
+
+ulimit -t ${cpuTime}
+
+ulimit -v ${virtualMemory}
+
+#Variaveis de Output
+
+red=`tput setaf 1`
+
+green=`tput setaf 2`
+
+reset=`tput sgr0`
+
+logmsg="$(date) | $(whoami) | $0 | $1 |"
+
+#Acessa o diretorio configurado na variavel PATHBIN
+
+cd ${pathbin}
+
+#Function Start
+
+start() {
+
+if [ -z `pidof -x ${prog}` ] ; then
+
+   echo "Starting ${prog}... "
+
+   exec ./${prog} >/dev/null &
+
+   RETVAL=$?
+
+   if [ ${RETVAL} -eq 0 ]; then
+
+      touch ${lockfile}
+
+      touch ${pidfile}
+
+      pidof -x ${prog} > ${pidfile}
+
+      sleep 1
+
+      echo "PID : `cat ${pidfile}`"
+
+      echo "${prog} running :   ${green}[ OK ]${reset}"
+
+      echo "${logmsg} ${prog} Started" >> ${logfile}
+
+   else
+
+      echo "Failed to start ${prog} :         ${red}[ Failure ]${reset}"
+
+      echo "${logmsg} Failed to start ${prog}" >> ${logfile}
+
+   fi
+
+   echo
+
+else
+
+   echo "${prog} is ${green}Started${reset} pid `pidof -x ${prog}`"
+
+   echo "${logmsg} ${prog} already started" >> ${logfile}
+
+fi
+
+}
+
+#Function Stop
+
+stop() {
+
+if [ ! -z `pidof -x ${prog}` ] ; then
+
+   killproc ${prog} >/dev/null &
+
+   #pkill -f ${prog}
+
+   echo
+
+   rm -f $lockfile
+
+   rm -f $pidfile
+
+   echo -n "Stopping ${prog}."
+
+   while [ ! -z `pidof -x ${prog}` ]
+
+   do
+
+        echo -n "."
+
+        sleep 1
+
+   done
+
+   echo
+
+   echo "${prog} is Stopped     ${red}[ Stopped ]${reset}"
+
+   echo "${logmsg} ${prog} stopped" >> ${logfile}
+
+else
+
+   echo "${prog} is not running ${red}[ Stopped ]${reset}"
+
+   echo "${logmsg} ${prog} already stopped" >> ${logfile}
+
+fi
+
+}
+
+#Function Status
+
+status() {
+
+pid=$(pidof -x ${prog})
+
+progport=$(lsof -Pp ${pid} | grep '(LISTEN)' | awk '{ print $9}' | cut -d: -f2 | xargs)
+
+list=$(ps -eo pid,start_time,cputime,pcpu,pmem,stat,size,nlwp,comm | grep ${pid})
+
+start_time=$(echo $list | awk '{ print $2 }')
+
+cputime=$(echo $list | awk '{ print $3 }')
+
+pcpu=$(echo $list | awk '{ print $4 }')
+
+pmem=$(echo $list | awk '{ print $5 }')
+
+stat=$(echo $list | awk '{ print $6 }')
+
+size=$(echo $list | awk '{ print $7 }')
+
+nlwp=$(echo $list | awk '{ print $8 }')
+
+comm=$(echo $list | awk '{ print $9 }')
+
+size=$(echo "$(bc <<< "scale=2;$size/1024") MB")
+
+echo "PROCESS           : ${comm}"
+
+echo "PORT              : ${progport}"
+
+echo "PID               : ${pid}"
+
+echo "STARTED           : ${start_time}"
+
+echo "TIME              : ${cputime}"
+
+echo "%CPU              : ${pcpu}"
+
+echo "%MEM              : ${pmem}"
+
+echo "MEMORY            : ${size}"
+
+echo "STATUS            : ${green}[ running ]${reset}"
+
+echo "THREADS           : ${nlwp}"
+
+}
+
+#MAIN
+
+case "$1" in
+
+start)
+
+    start
+
+    ;;
+
+stop)
+
+    stop
+
+    ;;
+
+status)
+
+    if [ ! -z `pidof -x ${prog}` ] ; then
+
+       echo "Status process     : ${green}[ OK ]${reset}"
+
+       status
+
+    else
+
+        echo "Status process    : ${red}[ Failure ]${reset}"
+
+        echo "Program $prog is not running!"
+
+    fi
+
+    ;;
+
+restart)
+
+    stop
+
+    sleep 2
+
+    start
+
+    sleep 2
+
+    status
+
+    ;;
+
+log)
+
+    cat ${logfile}
+
+    echo "More details at ${logfile}"
+
+    ;;
+
+*)
+
+    echo $"Usage: $0 {start|stop|restart|status|log}"
+
+    exit 1
+
+esac
+
+exit 0

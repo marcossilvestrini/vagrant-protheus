@@ -1,0 +1,18 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# User specific environment
+PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export PATH
+
+#export LD_LIBRARY_PATH={{ lockserver_path }}:{{ license_appserver_path }}:{{ dbaccess_bin_path }}:{{ broker_path }}:{{ slave01_path }}:{{ slave02_path }}:{{ soap_path }}:{{ rest_path }}
+export LD_LIBRARY_PATH=.
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions

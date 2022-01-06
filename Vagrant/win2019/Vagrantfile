@@ -1,0 +1,69 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# INSTALL PLUGINS
+unless Vagrant.has_plugin?("vagrant-reload")
+  puts 'Installing vagrant-reload Plugin...'
+  system('vagrant plugin install vagrant-reload')
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Box Windows Server 2019 Standart
+  config.vm.box = "gusztavvargadr/windows-server-standard-core"
+  config.vbguest.auto_update = true
+
+  # VM AD
+  config.vm.define "protheus" do |protheus|
+
+    # VARIABLE HOSTNAME
+    VM_DC_NAME= "protheus"
+
+    # Set Others parameters for windows vm
+    protheus.vm.guest = :windows
+    protheus.vm.communicator = "winrm"
+    protheus.vm.boot_timeout = 1200
+    protheus.vm.graceful_halt_timeout = 600
+    protheus.winrm.timeout = 1800
+    protheus.winrm.retry_limit = 200
+    protheus.winrm.retry_delay = 10
+    protheus.winrm.max_tries = 20
+    protheus.winrm.transport = :plaintext
+    protheus.winrm.basic_auth_only = true
+
+    # HOSTNAME
+    protheus.vm.hostname = VM_DC_NAME
+
+    # NETWORK
+    protheus.vm.network "public_network" ,ip: "192.168.0.132"
+
+    # MOUNTS
+    protheus.vm.synced_folder ".", "/vagrant", disabled: true
+    protheus.vm.synced_folder "./scripts", "/scripts"
+
+    # PROVIDER
+    protheus.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name = VM_DC_NAME
+      vb.memory = 2048
+      vb.cpus = 3
+    end
+
+    # PROVISION
+
+    # SETUP ANSIBLE
+    protheus.vm.provision "shell", path: "scripts/setup_ansible.ps1"
+
+    # SETUP AD SERVER
+    # protheus.vm.provision "ansible" do |ansible|
+    #   ansible.limit = "all"
+    #   ansible.inventory_path = "provisioning/hosts"
+    #   ansible.playbook = "provisioning/domain_controler.yml"
+    # end
+
+  end
+
+end

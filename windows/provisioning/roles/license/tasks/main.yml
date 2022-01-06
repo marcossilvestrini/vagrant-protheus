@@ -1,0 +1,45 @@
+---
+- name: Remove a Service
+  win_service:
+    name: '{{ service_name }}'
+    state: absent
+
+- name: Copy License Files
+  win_copy:
+    src: license.zip
+    dest: '{{ app_path }}\license.zip'
+
+- name: Extract License Files
+  win_unzip:
+    src: '{{ app_path }}\license.zip'
+    dest: '{{ app_path }}'
+    delete_archive: yes
+
+- name: Copy Appserver.ini
+  win_template:
+    src: appserver.ini.j2
+    dest: '{{ license_appserver_path }}\appserver_license.ini'
+    force: yes
+
+- name: Set License Bin Name
+  win_copy:
+    src: '{{ license_appserver_path }}\appserver.exe'
+    dest: '{{ license_appserver_path }}\appserver_license.exe'
+    force: yes
+    remote_src: yes
+
+- name: Create a Service
+  win_service:
+    name: '{{ service_name }}'
+    path: '{{ license_appserver_path }}\appserver_license.exe'
+    display_name: '{{ service_name }}'
+    description: 'TOTVS LICENSE SERVER'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+- name: Start License Service
+  win_service:
+    name: '{{ service_name }}'
+    state: started

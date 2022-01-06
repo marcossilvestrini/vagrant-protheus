@@ -1,0 +1,42 @@
+; Documentação Oficial
+; https://tdn.totvs.com/display/tec/Balanceamento+entre+Clientes+HTTP+e+servidor+Protheus
+
+|Parametros de Linnha            |Descrição
+
+-balance_smart_client_desktop	Executa o Application Server como proxy para o SmartClient Desktop.
+-balance_http	Executa o Application Server como proxy para o SmartClient HTML.
+-balance_telnet	Executa o Application Server como proxy para conexões via Telnet.
+-balance_web_services	Executa o Application Server como proxy para serviços de Web Service.
+
+|Parametros de Linnha            |Descrição         | Exemplo
+
+-i	Instala o serviço Windows.	appserver -balance_http -i
+-u	Desinstala o serviço Windows.	appserver -balance_http -u
+-d	Executa em modo desktop (numa janela DOS ou console Linux).	appserver -balance_http -d
+-a	Inicia o serviço Windows (ou daemon Linux).	appserver -balance_http -a
+-o	Interrompe o serviço Windows (ou daemon Linux).		appserver -balance_http -o
+-q	Verifica se o serviço Windows está instalado (ou daemon Linux está ativo).	appserver -balance_http -q
+
+; Acesso ao Monitor: http://localhost:8080/totvs_broker_query/status
+; Acesso ao Monitor: http://localhost:8080/totvs_broker_query/cfg
+; Acesso ao Monitor: http://localhost:8080/totvs_broker_query/ping
+
+[GENERAL]
+ConsoleLog={{ConsoleLog}}
+ConsoleLogDate = 1
+AsyncConsoleLog=0
+ConsoleFile={{broker_consoleFile}}
+
+;ConsoleLogDate = 1
+[BALANCE_SMART_CLIENT_DESKTOP]
+LOCAL_SERVER_PORT = {{broker_tcp}}
+; hostname ou endereço ip, e porta TCP onde os servidores Protheus ERP aceitam conexões TCP
+REMOTE_SERVER_01 = {{ip_app}} {{slave01_port}}
+REMOTE_SERVER_02 = {{ip_app}} {{slave02_port}}
+
+SERVICE_NAME = {{broker_name}}
+SERVICE_DISPLAY_NAME = {{broker_name}}
+
+; configuracao para o protheus monitor
+PROTHEUS_MONITOR_ADDRESS={{ip_app}}
+PROTHEUS_MONITOR_PORT=18004

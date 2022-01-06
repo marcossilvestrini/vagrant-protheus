@@ -1,0 +1,33 @@
+---
+- name: Set Drivers
+  template:
+    src: odbcinst.ini.j2
+    dest: '/etc/odbcinst.ini'
+    mode: 0775
+    force: yes
+  become: yes
+
+- name: Set System Data Source
+  template:
+    src: odbc.ini.j2
+    dest: '/etc/odbc.ini'
+    mode: 0775
+    force: yes
+  become: yes
+
+- name: Set User Data Source
+  template:
+    src: odbc.ini.j2
+    dest: '/home/vagrant/.odbc.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: 0775
+    force: yes
+
+- name: Create Simbolic Link for Lib
+  file:
+    src: /usr/lib64/psqlodbc.so
+    dest: /usr/lib64/libpsqlodbc.so
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    state: link

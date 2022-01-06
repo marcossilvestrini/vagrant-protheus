@@ -1,0 +1,92 @@
+---
+- name: Set Lockserver Bin Name
+  copy:
+    src: '{{ lockserver_path }}/appsrvlinux'
+    dest: '{{ lockserver_path }}/app_lockserver'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Set Broker Bin Name
+  copy:
+    src: '{{ broker_path }}/appsrvlinux'
+    dest: '{{ broker_path }}/app_broker'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Set Slave01 Bin Name
+  copy:
+    src: '{{ slave01_path }}/appsrvlinux'
+    dest: '{{ slave01_path }}/app_slave01'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Set Slave02 Bin Name
+  copy:
+    src: '{{ slave02_path }}/appsrvlinux'
+    dest: '{{ slave02_path }}/app_slave02'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Set Soap Bin Name
+  copy:
+    src: '{{ soap_path }}/appsrvlinux'
+    dest: '{{ soap_path }}/app_soap'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Set Soap Bin Name
+  copy:
+    src: '{{ rest_path }}/appsrvlinux'
+    dest: '{{ rest_path }}/app_rest'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Create PID file
+  file:
+    path: '/var/run/{{ item }}.pid'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop:
+    '{{ bin_name }}'
+  become: yes
+
+- name: Create LOCK file
+  file:
+    path: '/var/lock/subsys/{{ item }}'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop:
+    '{{ bin_name }}'
+  become: yes
+
+- name: Set LD_LIBRARY_PATH Variable in .bashrc
+  template:
+    src: .bashrc.j2
+    dest: /home/vagrant/.bashrc
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    force: yes
+
+- name: Set LD_LIBRARY_PATH Variable .bash_profile
+  template:
+    src: .bash_profile.j2
+    dest: /home/vagrant/.bash_profile
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    force: yes

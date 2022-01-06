@@ -1,0 +1,31 @@
+---
+common_packages:
+    - glibc
+    - libgcc
+    - libstdc++
+    - libuuid
+    - lsof
+    - bc
+    - libXrandr
+    - libXcursor
+    - libXinerama
+    - libXft
+    - libtool-ltdl
+    - libtool-ltdl-devel
+    - ncurses-compat-libs
+    - xorg-x11-server-Xorg
+    - xorg-x11-xauth
+    - vim
+    - zip
+    - unzip
+    - dos2unix
+    - net-tools
+    - java
+    - unixODBC.x86_64
+    - unixODBC-devel.x86_64
+    - postgresql-odbc.x86_64
+
+paths:
+    - '{{ logs }}'
+    - '{{ update }}'
+    - '{{ web_path }}'

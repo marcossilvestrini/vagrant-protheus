@@ -1,0 +1,25 @@
+---
+- name: Remove Broker Service
+  win_service:
+    name: '{{ broker_name }}'
+    state: absent
+
+- name: Remove Slave01 Service
+  win_service:
+    name: '{{ slave01_name }}'
+    state: absent
+
+- name: Remove Slave02 Service
+  win_service:
+    name: '{{ slave02_name }}'
+    state: absent
+
+- name: Remove Soap Service
+  win_service:
+    name: '{{ soap_name }}'
+    state: absent
+
+- name: Remove Rest Service
+  win_service:
+    name: '{{ rest_name }}'
+    state: absent

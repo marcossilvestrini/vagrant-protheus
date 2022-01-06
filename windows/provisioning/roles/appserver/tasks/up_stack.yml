@@ -1,0 +1,25 @@
+---
+- name: Start Broker Service
+  win_service:
+    name: '{{ broker_name }}'
+    state: started
+
+- name: Start Slave01 Service
+  win_service:
+    name: '{{ slave01_name }}'
+    state: started
+
+- name: Start Slave02 Service
+  win_service:
+    name: '{{ slave02_name }}'
+    state: started
+
+- name: Start Soap Service
+  win_service:
+    name: '{{ soap_name }}'
+    state: started
+
+- name: Start Rest Service
+  win_service:
+    name: '{{ rest_name }}'
+    state: started

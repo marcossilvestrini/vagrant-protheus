@@ -1,0 +1,43 @@
+# Example driver definitions
+
+# Driver from the postgresql-odbc package
+# Setup from the unixODBC package
+[PostgreSQL]
+Description     = ODBC for PostgreSQL
+Driver          = /usr/lib/libpsqlodbc.so
+Setup           = /usr/lib/libodbcpsqlS.so
+Driver64        = /usr/lib64/libpsqlodbc.so
+Setup64         = /usr/lib64/libodbcpsqlS.so
+FileUsage       = 1
+
+
+# Driver from the mysql-connector-odbc package
+# Setup from the unixODBC package
+[MySQL]
+Description     = ODBC for MySQL
+Driver          = /usr/lib4/libmyodbc5.so
+Setup           = /usr/lib4/libodbcmyS.so
+Driver64        = /usr/lib64/libmyodbc5.so
+Setup64         = /usr/lib64/libodbcmyS.so
+FileUsage       = 1
+
+
+# Driver from the freetds-libs package
+# Setup from the unixODBC package
+[FreeTDS]
+Description     = Free Sybase & MS SQL Driver
+Driver          = /usr/lib4/libtdsodbc.so
+Setup           = /usr/lib4/libtdsS.so
+Driver64        = /usr/lib64/libtdsodbc.so
+Setup64         = /usr/lib64/libtdsS.so
+Port            = 1433
+
+
+# Driver from the mariadb-connector-odbc package
+# Setup from the unixODBC package
+[MariaDB]
+Description     = ODBC for MariaDB
+Driver          = /usr/lib4/libmaodbc.so
+Driver64        = /usr/lib64/libmaodbc.so
+FileUsage       = 1
+

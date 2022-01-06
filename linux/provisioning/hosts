@@ -1,0 +1,11 @@
+[all]
+192.168.0.133
+
+[protheus]
+192.168.0.133
+
+[protheus:vars]
+ansible_user=vagrant
+ansible_ssh_private_key_file=security/id_rsa
+ansible_python_interpreter=/usr/bin/python3
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

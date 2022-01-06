@@ -1,0 +1,25 @@
+---
+- name: Set Broker appserver.ini
+  win_template:
+    src: totvsbroker.ini.j2
+    dest: '{{ broker_path }}\appserver_broker.ini'
+
+- name: Set Slave01 appserver.ini
+  win_template:
+    src: totvslave01.ini.j2
+    dest: '{{ slave01_path }}\appserver_slave01.ini'
+
+- name: Set Slave02 appserver.ini
+  win_template:
+    src: totvslave02.ini.j2
+    dest: '{{ slave02_path }}\appserver_slave02.ini'
+
+- name: Set Soap appserver.ini
+  win_template:
+    src: totvssoap.ini.j2
+    dest: '{{ soap_path }}\appserver_soap.ini'
+
+- name: Set Soap appserver.ini
+  win_template:
+    src: totvsrest.ini.j2
+    dest: '{{ rest_path }}\appserver_rest.ini'

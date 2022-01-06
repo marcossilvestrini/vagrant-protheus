@@ -1,0 +1,87 @@
+---
+# DB
+db_ip: '192.168.0.133'
+db_user: protheus #(this value present in role postgresql/vars/main.yml)
+db_pass: protheus #(this value present in role postgresql/vars/main.yml)
+database: protheus #(this value present in role postgresql/vars/main.yml)
+sgbd: POSTGRES
+alias: protheus
+
+# APP
+ip_app: '192.168.0.133'
+ip_developer: '192.168.0.100'
+
+# Paths of App Stack
+
+# App Path
+app_path: /totvs
+
+# Dictionary Path
+dictionary_path: '{{ app_path }}/protheus-data'
+
+# Web Path
+web_path: '{{ dictionary_path }}/web'
+
+# RPO Path
+rpo_path: '{{ app_path }}/rpo'
+
+# Logs path
+logs: '{{ app_path }}/logs'
+
+# Updates Path
+update: '{{ app_path }}/update'
+
+# Scripts path (handlers)
+script_path: /etc/init.d
+
+# Bin Path
+bin_path: '{{ app_path }}/bin'
+
+# Base Appserver Path
+appserver_path: '{{ bin_path }}/appserver'
+
+# Base Appserver Path
+smartclient_path: '{{ bin_path }}/smartclient'
+
+# SSL
+Verbose :  0
+SSL2    :  0
+SSL3    :  1
+TLS1_0  :  1
+TLS1_1  :  1
+TLS1_2  :  1
+Bugs    :  0
+State   :  0
+Debug   :  0
+
+# Lockserver
+lockserver_ip: '{{ ip_app }}'
+lockserver_port: 7020
+lockserver_path: '{{ appserver_path }}/lockserver'
+
+# License
+license_ip: '{{ ip_app }}'
+license_server_port: 5555
+license_path: '{{ app_path }}/license'
+license_bin_path: '{{ license_path }}/bin'
+license_appserver_path: '{{ license_bin_path }}/appserver'
+
+# Dbaccess
+dbaccess_ip: '{{ ip_app }}'
+dbaccess_port: 7900
+dbaccess_monitor_port: 7901
+dbaccess_path: '{{ app_path }}/dbaccess'
+dbaccess_bin_path: '{{ dbaccess_path }}/multi'
+
+# Appservers Paths
+broker_path: '{{ appserver_path }}/broker'
+slave01_path: '{{ appserver_path }}/slave01'
+slave02_path: '{{ appserver_path }}/slave02'
+soap_path: '{{ appserver_path }}/soap'
+rest_path: '{{ appserver_path }}/rest'
+
+# Protheus Environments
+environment_name: SKYNET
+
+# User service protheus
+user_service: vagrant

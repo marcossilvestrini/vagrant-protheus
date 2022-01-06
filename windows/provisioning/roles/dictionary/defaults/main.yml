@@ -1,0 +1,4 @@
+---
+system_path: '{{ dictionary_path }}\system'
+systemload_path: '{{ dictionary_path }}\systemload'
+portaL_rh_path: '{{ web_path }}\portal-rh'

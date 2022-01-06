@@ -1,0 +1,36 @@
+---
+- name: Set Broker Bin Name
+  win_copy:
+    src: '{{ broker_path }}\appserver.exe'
+    dest: '{{ broker_path }}\appserver_broker.exe'
+    remote_src: yes
+
+- name: Set Slave01 Bin Name
+  win_copy:
+    src: '{{ slave01_path }}\appserver.exe'
+    dest: '{{ slave01_path }}\appserver_slave01.exe'
+    remote_src: yes
+
+- name: Set Slave02 Bin Name
+  win_copy:
+    src: '{{ slave02_path }}\appserver.exe'
+    dest: '{{ slave02_path }}\appserver_slave02.exe'
+    remote_src: yes
+
+- name: Set Soap Bin Name
+  win_copy:
+    src: '{{ soap_path }}\appserver.exe'
+    dest: '{{ soap_path }}\appserver_soap.exe'
+    remote_src: yes
+
+- name: Set Soap Bin Name
+  win_copy:
+    src: '{{ rest_path }}\appserver.exe'
+    dest: '{{ rest_path }}\appserver_rest.exe'
+    remote_src: yes
+
+- name: Delete Appserver Bin Files
+  win_file:
+    path: '{{ item }}\appserver.exe'
+    state: absent
+  loop: '{{ paths }}'

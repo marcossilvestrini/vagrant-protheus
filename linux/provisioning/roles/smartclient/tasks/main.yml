@@ -1,0 +1,30 @@
+---
+- name: Ensure {{ smartclient_path }} dir Exist
+  file:
+    path: "{{ smartclient_path }}"
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Copy Smartclient File
+  copy:
+    src: smartclient.tar.gz
+    dest: "{{ smartclient_path }}"
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Extract Smartclient Files
+  unarchive:
+    src: '{{ smartclient_path }}/smartclient.tar.gz'
+    dest: '{{ smartclient_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    remote_src: yes
+
+- name: Clear Smartclient Files
+  file:
+    path: '{{ smartclient_path }}/smartclient.tar.gz'
+    state: absent

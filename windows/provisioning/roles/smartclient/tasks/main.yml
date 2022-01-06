@@ -1,0 +1,16 @@
+---
+- name: Ensure {{ smartclient_path }} dir Exist
+  win_file:
+    path: '{{ smartclient_path }}'
+    state: directory
+
+- name: Copy Smartclient File
+  win_copy:
+    src: smartclient.zip
+    dest: '{{ smartclient_path }}\smartclient.zip'
+
+- name: Extract Smartclient Files
+  win_unzip:
+    src: '{{ smartclient_path }}\smartclient.zip'
+    dest: '{{ smartclient_path }}'
+    delete_archive: yes

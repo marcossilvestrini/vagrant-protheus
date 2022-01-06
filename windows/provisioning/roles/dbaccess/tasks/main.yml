@@ -1,0 +1,53 @@
+---
+- name: Remove a Service
+  win_service:
+    name: '{{ service_name }}'
+    state: absent
+
+- name: Create DBAccess Path
+  win_file:
+    path: '{{ dbaccess_path }}'
+    state: directory
+
+- name: Copy Dbaccess Files
+  win_copy:
+    src: dbaccess.zip
+    dest: '{{ dbaccess_path }}\dbaccess.zip'
+
+- name: Extract Dbaccess Files
+  win_unzip:
+    src: '{{ dbaccess_path }}\dbaccess.zip'
+    dest: '{{ dbaccess_path }}'
+    delete_archive: yes
+
+- name: Copy Dbaccess.ini
+  win_template:
+    src: totvsdbaccess.ini.j2
+    dest: '{{ dbaccess_path }}\dbaccess.ini'
+    force: yes
+
+- name: Set Dbaccess Bin Name
+  win_copy:
+    src: '{{ dbaccess_path }}\dbaccess64.exe'
+    dest: '{{ dbaccess_path }}\dbaccess64_slave1.exe'
+    force: yes
+    remote_src: yes
+
+- name: Create a Service
+  win_service:
+    name: '{{ service_name }}'
+    path: '{{ dbaccess_path }}\dbaccess64_slave1.exe'
+    display_name: '{{ service_name }}'
+    description: 'TOTVS DBAccess'
+    state: stopped
+    start_mode: manual
+    username: '{{ user }}'
+    password: '{{ password }}'
+
+# Set postgresql-odbc
+- include_tasks: odbc.yml
+
+- name: Start DBAccess Service
+  win_service:
+    name: '{{ service_name }}'
+    state: started

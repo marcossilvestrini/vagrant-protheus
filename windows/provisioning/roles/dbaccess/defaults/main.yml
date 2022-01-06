@@ -1,0 +1,3 @@
+---
+dbaccess_log: '{{ logs }}\dbaccess.log'
+service_name: .dbaccess_7900

@@ -1,0 +1,133 @@
+; Environment
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064764
+[{{environment_name}}]
+SourcePath={{rpo_path}}
+RootPath={{dictionary_path}}
+StartPath={{StartPath}}
+LocalFiles={{local_files}}
+Localdbextension={{localdbextension}}
+PictFormat=Default
+x2_path=
+RpoDb={{rpodb}}
+RpoLanguage={{rpolanguage}}
+RpoVersion={{rpoversion}}
+DebugThreadUsedMemory={{DebugThreadUsedMemory}}
+ThreadMemWarning={{ThreadMemWarning}}
+ThreadMemStep={{ThreadMemStep}}
+KillStack={{KillStack}}
+Trace={{Trace}}
+TOPMemoMega={{TOPMemoMega}}
+TraceStack={{TraceStack}}
+MaxLocks={{MaxLocks}}
+AdvSQLReplay={{AdvSQLReplay}}
+AdvSQLReplayLog={{AdvSQLReplayLog}}
+AdvSQLReplayPath={{AdvSQLReplayPath}}
+AdvSQLReplayIOP={{AdvSQLReplayIOP}}
+AdvSQLReplayLogMaxSize={{AdvSQLReplayLogMaxSize}}
+LogProfilerPath={{slave01_LogProfilerPath}}
+StartSysInDB=1
+
+;DBAccess
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064885
+[DBAccess]
+Server= {{DBAccessServer}}
+Port={{dbaccess_port}}
+Database={{sgbd}}
+Alias={{alias}}
+PROTHEUSONLY=0
+
+;Drivers
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064839
+[Drivers]
+Active=TCP
+MultiProtocolPort={{MultiProtocolPort}}
+MultiProtocolPortSecure={{MultiProtocolPortSecure}}
+;Secure={{Secure}}
+
+;TCP
+;https://tdn.totvs.com/pages/viewpage.action?pageId=135495723
+[TCP]
+Type={{Type}}
+Port={{slave01_port}}
+Ip={{ ip_app }}
+
+;LicenseClient
+;https://tdn.totvs.com/pages/viewpage.action?pageId=244734923
+[LicenseClient]
+Server={{license_ip}}
+Port={{license_server_port}}
+
+;General
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064796
+[General]
+CHECKSPECIALKEY=0
+InstallPath= {{app_path}}
+ConsoleLog={{ConsoleLog}}
+ChangeEncodingBehavior={{ChangeEncodingBehavior}}
+InactiveTimeout={{InactiveTimeout}}
+CanAcceptDebugger={{CanAcceptDebugger}}
+CanAcceptLB={{CanAcceptLB}}
+CanAcceptMonitor={{CanAcceptMonitor}}
+CanRunJobs={{CanRunJobs}}
+CanAcceptRPC={{CanAcceptRPC}}
+DebugThreadUsedMemory={{DebugThreadUsedMemory}}
+FloatingPointPrecise={{FloatingPointPrecise}}
+IdeMessages={{IdeMessages}}
+ConsoleFile={{slave01_consoleFile}}
+AsyncConsoleLog=0
+LogTimeStamp = {{LogTimeStamp}}
+ShowFullLog={{ShowFullLog}}
+ShowIPClient={{ShowIPClient}}
+SocketMessages={{SocketMessages}}
+;SSLRedirect={{SSLRedirect}}
+LatencyLog={{LatencyLog}}
+LatencyLogFile={{slave01_latencyLogFile}}
+LogHttpFuncs= {{LogHttpFuncs}}
+MaxStringSize={{MaxStringSize}}
+WsdlStreamType={{WsdlStreamType}}
+SocketsDefaultIPV6={{SocketsDefaultIPV6}}
+ServerMemoryLimit={{ServerMemoryLimit}}
+
+;Service
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064864
+[Service]
+Name={{slave01_name}}
+Displayname={{slave01_displayname}}
+Description={{slave01_description}}
+
+;TDS
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[TDS]
+ALLOWAPPLYPATCH={{ALLOWAPPLYPATCH}}
+ALLOWEDIT={{ALLOWEDIT}}
+ENABLEDISCONNECTUSER={{ENABLEDISCONNECTUSER}}
+ENABLESENDMESSAGE={{ENABLESENDMESSAGE}}
+ENABLEBLOCKNEWCONNECTION={{ENABLEBLOCKNEWCONNECTION}}
+ENABLESTOPSERVER={{ENABLESTOPSERVER}}
+
+;SSLConfigure
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[SSLConfigure]
+Verbose = {{Verbose}}
+SSL2    = {{SSL2}}
+SSL3    = {{SSL3}}
+TLS1_0  = {{TLS1_0}}
+TLS1_1  = {{TLS1_1}}
+TLS1_2  = {{TLS1_2}}
+Bugs    = {{Bugs}}
+State   = {{State}}
+Debug   = {{Debug}}
+
+;WEBAPP
+;https://tdn.totvs.com/pages/viewpage.action?pageId=307834830
+[WEBAPP]
+Port={{slave01_http_port}}
+EnvServer={{EnvServer}}
+LastMainProg={{LastMainProg}}
+MaxBodySize={{MaxBodySize}}
+MaxHeaderSize={{MaxHeaderSize}}
+MaxRequestTime={{MaxRequestTime}}
+
+[WEBAPP-HEADERS]
+Access-Control-Allow-Origin=*
+

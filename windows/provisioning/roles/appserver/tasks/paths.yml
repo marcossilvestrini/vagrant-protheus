@@ -1,0 +1,11 @@
+---
+- name: Create Appserver Base Path
+  win_file:
+    path: "{{ appserver_path }}"
+    state: directory
+
+- name: Create Appservers Paths (broker, slaves, ws)
+  win_file:
+    path: '{{ item }}'
+    state: directory
+  loop: '{{ paths }}'

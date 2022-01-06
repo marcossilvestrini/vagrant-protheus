@@ -1,0 +1,49 @@
+---
+- name: Remove ODBC System DSN If Exist
+  win_shell: |
+    If(Get-OdbcDsn -Name '{{ database }}' -DsnType 'System'){
+      Remove-OdbcDsn -Name '{{ database }}' -DsnType 'System' -PassThru
+    }
+
+- name: Add an ODBC System DSN
+  win_shell: |
+    $db_properties=@(
+      'Database={{ database }}',
+      'Servername={{ db_ip }}',
+      'Username={{ db_user}}',
+      'Description={{ database }}',
+      'SSLmode=disable',
+      'Port=5432',
+      'Password={{ db_pass }}',
+      'UniqueIndex=1',
+      'UnknownsAsLongVarchar=1',
+      'TextAsLongVarchar=1',
+      'BoolsAsChar=1',
+      'MaxLongVarcharSize=8190',
+      'ReadOnly=0',
+      'RowVersioning=0',
+      'ShowSystemTables=0',
+      'LFConversion=-1',
+      'ShowOidColumn=0',
+      'UnknownSizes=2',
+      'FakeOidIndex=0',
+      'UseServerSidePrepare=-1',
+      'Parse=0',
+      'MaxVarcharSize=255',
+      'Fetch=100',
+      'XaOpt=-1',
+      'ByteaAsLongVarBinary=-1',
+      'KeepaliveInterval=-1',
+      'AB=0',
+      'UpdatableCursors=-1',
+      'TrueIsMinus1=-1',
+      'CommLog=0',
+      'KeepaliveTime=-1',
+      'UseDeclareFetch=0',
+      'LowerCaseIdentifier=-1',
+      'Trusted_Connection=Yes'
+    )
+    Add-OdbcDsn -Name '{{ database }}' `
+    -DriverName 'PostgreSQL ANSI(x64)' `
+    -DsnType 'System' `
+    -SetPropertyValue @($db_properties) -PassThru

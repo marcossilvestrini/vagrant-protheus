@@ -1,0 +1,115 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# INSTALL PLUGINS
+unless Vagrant.has_plugin?("vagrant-reload")
+  puts 'Installing vagrant-reload Plugin...'
+  system('vagrant plugin install vagrant-reload')
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Configs VBGuest
+  config.vbguest.auto_update = false
+  config.vbguest.no_remote = true
+
+  # VM PostgreSQL
+  config.vm.define "protheus_db"  do |protheus_db|
+
+    # Box metadata location and box name
+    BOX_URL = "https://oracle.github.io/vagrant-projects/boxes"
+    BOX_NAME = "oraclelinux/8"
+    protheus_db.vm.box = BOX_NAME
+    protheus_db.vm.box_url = "#{BOX_URL}/#{BOX_NAME}.json"
+
+    # VARIABLE HOSTNAME
+   DB_NAME= "ol8-postgresql"
+
+    # HOSTNAME
+    protheus_db.vm.hostname =DB_NAME
+
+    # NETWORK
+    protheus_db.vm.network "public_network" ,ip: "192.168.0.132" ,mode: "bridge" ,bridge: [
+    "ens32",
+    "Marvell AQtion 5Gbit Network Adapter"
+    ]
+
+    # MOUNTS
+    protheus_db.vm.synced_folder ".", "/vagrant", disabled: true
+    protheus_db.vm.synced_folder "./security", "/security"
+
+    # PROVIDER
+    protheus_db.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name =DB_NAME
+      vb.memory = 4096
+      vb.cpus = 3
+    end
+
+    # PROVISION
+    # SSH,FIREWALLD,SELINUX AND PACKAGES
+    protheus_db.vm.provision "shell", path: "scripts/install.sh"
+
+  end
+
+  # VM Protheus
+  config.vm.define "protheus_app" do |protheus_app|
+
+    # Box Windows Server 2019 Standart
+    protheus_app.vm.box = "gusztavvargadr/windows-server-standard-core"
+    protheus_app.vbguest.auto_update = true
+
+    # VARIABLE HOSTNAME
+    APP_NAME= "win2019-protheus"
+
+    # Set Others parameters for windows vm
+    protheus_app.vm.guest = :windows
+    protheus_app.vm.communicator = "winrm"
+    protheus_app.vm.boot_timeout = 1200
+    protheus_app.vm.graceful_halt_timeout = 600
+    protheus_app.winrm.timeout = 1800
+    protheus_app.winrm.retry_limit = 200
+    protheus_app.winrm.retry_delay = 10
+    protheus_app.winrm.max_tries = 20
+    protheus_app.winrm.transport = :plaintext
+    protheus_app.winrm.basic_auth_only = true
+
+    # HOSTNAME
+    protheus_app.vm.hostname = APP_NAME
+
+    # NETWORK
+    protheus_app.vm.network "public_network" ,ip: "192.168.0.133" ,mode: "bridge",bridge: [
+    "ens32",
+    "Marvell AQtion 5Gbit Network Adapter"
+    ]
+
+    # MOUNTS
+    protheus_app.vm.synced_folder ".", "/vagrant", disabled: true
+    protheus_app.vm.synced_folder "./scripts", "/totvs/scripts"
+
+    # PROVIDER
+    protheus_app.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name = APP_NAME
+      vb.memory = 4096
+      vb.cpus = 3
+    end
+
+    # PROVISION
+
+    # SETUP ANSIBLE
+    protheus_app.vm.provision "shell", path: "scripts/setup_ansible.ps1"
+
+    # PROVISIONING ANSIBLE
+    protheus_app.vm.provision "ansible" do |ansible|
+      ansible.limit = "all"
+      ansible.inventory_path = "provisioning/hosts"
+      ansible.playbook = "provisioning/app.yml"
+    end
+
+  end
+
+end

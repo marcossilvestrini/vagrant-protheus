@@ -1,0 +1,48 @@
+---
+- name: Set Lockserver appserver.ini
+  template:
+    src: totvslockserver.ini.j2
+    dest: '{{ lockserver_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set Broker appserver.ini
+  template:
+    src: totvsbroker.ini.j2
+    dest: '{{ broker_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set Slave01 appserver.ini
+  template:
+    src: totvslave01.ini.j2
+    dest: '{{ slave01_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set Slave02 appserver.ini
+  template:
+    src: totvslave02.ini.j2
+    dest: '{{ slave02_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set Soap appserver.ini
+  template:
+    src: totvssoap.ini.j2
+    dest: '{{ soap_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set Soap appserver.ini
+  template:
+    src: totvsrest.ini.j2
+    dest: '{{ rest_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'

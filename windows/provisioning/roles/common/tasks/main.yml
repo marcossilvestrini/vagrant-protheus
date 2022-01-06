@@ -1,0 +1,85 @@
+---
+- name: Config Network
+  win_shell: |
+    $publicInfos = Get-NetIPAddress | Where-Object { $_.IPAddress -like "*{{ netID }}*"}
+    $natInfos = Get-NetIPAddress | Where-Object { $_.IPAddress -like "*10.0.2*" }
+    # Disable IPV6 in Public Network
+    Disable-NetAdapterBinding -Name $publicInfos.InterfaceAlias -ComponentID ms_tcpip6 -PassThru
+    # Disable IPV6 in Nat Network
+    Disable-NetAdapterBinding -Name $natInfos.InterfaceAlias -ComponentID ms_tcpip6 -PassThru
+
+    $wmi= Get-WmiObject win32_networkadapterconfiguration |Where-Object{$_.IPAddress -like "*{{ netID }}*"}
+    $wmi.SetGateways("{{ default_gateway }}", 1)
+
+- name: Setup Powershell
+  win_shell: |
+    ## Enable remotly execution
+    Enable-PSRemoting -force
+    Set-ExecutionPolicy -Scope process -ExecutionPolicy RemoteSigned -force
+
+    ## Set TrustedHosts
+    Set-Item WSMan:\localhost\Client\TrustedHosts * -force
+
+    ## Set WMI
+    winrm quickconfig -force >$null
+
+- name: Disable Firewall for Domain, Public and Private profiles
+  win_firewall:
+    state: disabled
+    profiles:
+    - Domain
+    - Private
+    - Public
+  tags: disable_firewall
+
+- name: Create Local User
+  win_user:
+    name: '{{ user }}'
+    password: '{{ password }}'
+    state: present
+    update_password: on_create
+    password_never_expires: yes
+    groups:
+      - Users
+      - Administrators
+      - Distributed COM Users
+      - Remote Management Users
+      - Remote Desktop Users
+  ignore_errors: True
+
+- name: Add account to Log on as a service
+  win_user_right:
+    name: SeServiceLogonRight
+    users:
+    - '{{ user }}'
+    action: add
+
+- name: Create Commons Paths (logs, update)
+  win_file:
+    path: '{{ item }}'
+    state: directory
+  loop: '{{ paths }}'
+
+- name: Install Packages
+  win_chocolatey:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ common_packages }}'
+
+- name: Install Java
+  win_chocolatey:
+    name: "{{ jdk_package }}"
+    state: present
+    version: "{{ java_major_version }}.{{ java_minor_version }}"
+
+- name: Set Java_home
+  win_environment:
+    state: present
+    name: JAVA_HOME
+    value: 'c:\program files\java\jdk1.{{ java_major_version }}_{{ java_minor_version }}'
+    level: machine
+
+- name: Add Java to path
+  win_path:
+    elements:
+      - 'c:\program files\java\jdk1{{ java_major_version }}_{{ java_minor_version }}\bin'

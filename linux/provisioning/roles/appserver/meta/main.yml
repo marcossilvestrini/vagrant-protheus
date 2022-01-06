@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Marcos Silvestrini
+  description: Role for Appservers Tasks
+  company: Silvestrini .
+  license: MIT
+  min_ansible_version: 2.7
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+  galaxy_tags:
+    - totvs
+    - protheus
+    - dbaccess
+    - smartclient
+    - appserver
+    - licenseserver
+    - development
+dependencies: []

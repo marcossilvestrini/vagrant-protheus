@@ -1,0 +1,128 @@
+---
+
+- name: Create License Paths
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  loop: '{{ paths }}'
+  become: yes
+
+- name: Copy Appserver Files
+  copy:
+    src: appserver.tar.gz
+    dest: '{{ license_appserver_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Extract Appserver Files
+  unarchive:
+    src: '{{ license_appserver_path }}/appserver.tar.gz'
+    dest: '{{ license_appserver_path }}'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    remote_src: yes
+
+- name: Copy Cert Files
+  copy:
+    src: certs.tar.gz
+    dest: '{{ license_certs_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Extract Cert Files
+  unarchive:
+    src: '{{ license_certs_path }}/certs.tar.gz'
+    dest: '{{ license_certs_path }}'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    remote_src: yes
+
+- name: Copy Webapp file
+  copy:
+    src: webapp.so
+    dest: '{{ license_appserver_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Copy RPO File
+  copy:
+    src: tttp120.rpo
+    dest: '{{ license_source_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Copy Appserver.ini
+  template:
+    src: appserver.ini.j2
+    dest: '{{ license_appserver_path }}/appserver.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Copy licenseserverinstall.ini
+  template:
+    src: licenseserverinstall.ini.j2
+    dest: '{{ license_appserver_path }}/licenseserverinstall.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Copy lsinitialize.inf
+  template:
+    src: lsinitialize.inf.j2
+    dest: '{{ license_appserver_path }}/lsinitialize.inf'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Set License Bin Name
+  copy:
+    src: '{{ license_appserver_path }}/appsrvlinux'
+    dest: '{{ license_appserver_path }}/app_license'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+    remote_src: yes
+
+- name: Copy Script for Maintenance(Stop,Start,Restart, Status)
+  template:
+    src: totvslicense.j2
+    dest: '{{ script_path}}/totvslicense'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: '0775'
+
+- name: Create PID file
+  file:
+    path: '/var/run/app_license.pid'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  become: yes
+
+- name: Create LOCK file
+  file:
+    path: '/var/lock/subsys/app_license'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  become: yes
+
+- name: Clear Appserver Files
+  file:
+    path: '{{ license_appserver_path }}/appserver.tar.gz'
+    state: absent
+
+- name: Clear Cert Files
+  file:
+    path: '{{ license_certs_path }}/certs.tar.gz'
+    state: absent

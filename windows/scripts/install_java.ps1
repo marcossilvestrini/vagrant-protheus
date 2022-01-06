@@ -1,0 +1,1 @@
+cmd.exe /c "MD C:\Install-temp&bitsadmin /transfer Download /download /priority high https://javadl.oracle.com/webapps/download/AutoDL?BundleId=236886_42970487e3af4f5aa5bca3f542482c60 c:\Install-temp\Java.exe&start /wait c:\Install-temp\Java.exe /s & RD c:\Install-temp /S /Q"

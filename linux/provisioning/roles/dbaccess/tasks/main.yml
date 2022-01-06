@@ -1,0 +1,66 @@
+---
+- name: Create DBAccess Path
+  file:
+    path: "{{ dbaccess_path }}"
+    state: directory
+    mode: '0755'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Copy DBAccess Files
+  copy:
+    src: dbaccess.tar.gz
+    dest: '{{ dbaccess_path }}'
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+
+- name: Extract DBAccess Files
+  unarchive:
+    src: '{{ dbaccess_path }}/dbaccess.tar.gz'
+    dest: '{{ dbaccess_path }}'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    remote_src: yes
+
+- name: Clear DBAccess Files
+  file:
+    path: '{{ dbaccess_path }}/dbaccess.tar.gz'
+    state: absent
+
+- name: Copy Dbaccess Config File(dbaccess.ini)
+  template:
+    src: totvsdbaccess.ini.j2
+    dest: '{{ dbaccess_bin_path }}/dbaccess.ini'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: 0775
+
+- name: Copy Script for Maintenance(Stop,Start,Restart, Status)
+  template:
+    src: totvsdbaccess.j2
+    dest: '{{ script_path}}/totvsdbaccess'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+    mode: 0775
+
+- name: Create PID file
+  file:
+    path: '/var/run/dbaccess64.pid'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  become: yes
+
+- name: Create LOCK file
+  file:
+    path: '/var/lock/subsys/dbaccess64'
+    state: touch
+    mode: '0775'
+    owner: '{{ user_service }}'
+    group: '{{ user_service }}'
+  become: yes
+
+# Set postgresql-odbc
+- include_tasks: odbc.yml

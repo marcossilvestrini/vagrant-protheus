@@ -1,0 +1,33 @@
+---
+- name: Create Dictionary Paths
+  win_file:
+    path: '{{ item }}'
+    state: directory
+  loop:
+    - '{{ system_path }}'
+    - '{{ systemload_path }}'
+    - '{{ web_path }}'
+    - '{{ portaL_rh_path }}'
+
+- name: Copy Dictionary Files
+  win_copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  loop:
+    - { src: 'BRA-MENUS.ZIP' ,dest: '{{ system_path }}\BRA-MENUS.ZIP'}
+    - { src: 'BRA-DICIONARIOS_COMPL.ZIP' ,dest: '{{ systemload_path }}\BRA-DICIONARIOS_COMPL.ZIP'}
+    - { src: 'BRA-HELPS_COMPL.ZIP' ,dest: '{{ systemload_path }}\BRA-HELPS_COMPL.ZIP'}
+    - { src: 'web-files.zip' ,dest: '{{ systemload_path }}\web-files.zip'}
+    - { src: 'PortalMeuRH.zip' ,dest: '{{ portaL_rh_path }}\PortalMeuRH.zip'}
+
+- name: Extract Dictionary Files
+  win_unzip:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    delete_archive: yes
+  loop:
+    - { src: '{{ system_path }}\BRA-MENUS.ZIP' ,dest: '{{ system_path }}'}
+    - { src: '{{ systemload_path }}\BRA-DICIONARIOS_COMPL.ZIP' ,dest: '{{ systemload_path }}'}
+    - { src: '{{ systemload_path }}\BRA-HELPS_COMPL.ZIP' ,dest: '{{ systemload_path }}'}
+    - { src: '{{ systemload_path }}\web-files.zip' ,dest: '{{ systemload_path }}'}
+    - { src: '{{ portaL_rh_path }}\PortalMeuRH.zip' ,dest: '{{ portaL_rh_path }}'}

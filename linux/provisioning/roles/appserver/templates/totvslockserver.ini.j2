@@ -1,0 +1,40 @@
+# Configuracao do Servico do Lock Server
+
+[General]
+ConsoleLog={{ConsoleLog}}
+CONSOLEFILE={{logs}}/protheus_lockserver.log
+InstallPath={{app_path}}
+CanAcceptFSRemote=1
+ASyncConsoleLog=0
+
+[LockServer]
+Enable=1
+Server={{lockserver_ip}}
+Port={{lockserver_port}}
+messagelog=1
+WorkThreadQtdMin=1000
+WorkThreadStackSize=131072
+
+[Drivers]
+ACTIVE=TCP
+
+[TCP]
+TYPE=TCPIP
+PORT={{lockserver_port}}
+
+[LICENSECLIENT]
+SERVER={{license_ip}}
+PORT={{license_server_port}}
+
+;SSLConfigure
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[SSLConfigure]
+Verbose = {{Verbose}}
+SSL2    = {{SSL2}}
+SSL3    = {{SSL3}}
+TLS1_0  = {{TLS1_0}}
+TLS1_1  = {{TLS1_1}}
+TLS1_2  = {{TLS1_2}}
+Bugs    = {{Bugs}}
+State   = {{State}}
+Debug   = {{Debug}}

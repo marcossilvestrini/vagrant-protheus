@@ -1,0 +1,24 @@
+---
+- name: Copy Appserver Base File
+  win_copy:
+    src: appserver.zip
+    dest: '{{ appserver_path }}\appserver.zip'
+
+- name: Extract Appserver Files
+  win_unzip:
+    src: '{{ appserver_path }}\appserver.zip'
+    dest: '{{ item }}'
+  loop:
+    '{{ paths }}'
+
+- name: Copy Webapp file
+  win_copy:
+    src: webapp.dll
+    dest: '{{ item }}\webapp.dll'
+  loop:
+    '{{ paths }}'
+
+- name: Delete Appserver Files
+  win_file:
+    path: '{{ appserver_path }}\appserver.zip'
+    state: absent

@@ -1,0 +1,164 @@
+; Environment
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064764
+[{{environment_name}}]
+SourcePath={{rpo_path}}
+RootPath={{dictionary_path}}
+StartPath={{StartPath}}
+LocalFiles={{local_files}}
+Localdbextension={{localdbextension}}
+PictFormat=Default
+RpoDb={{rpodb}}
+x2_path=
+RpoLanguage={{rpolanguage}}
+RpoVersion={{rpoversion}}
+DebugThreadUsedMemory={{DebugThreadUsedMemory}}
+ThreadMemWarning={{ThreadMemWarning}}
+ThreadMemStep={{ThreadMemStep}}
+KillStack={{KillStack}}
+Trace={{Trace}}
+TOPMemoMega={{TOPMemoMega}}
+TraceStack={{TraceStack}}
+MaxLocks={{MaxLocks}}
+AdvSQLReplay={{AdvSQLReplay}}
+AdvSQLReplayLog={{AdvSQLReplayLog}}
+AdvSQLReplayPath={{AdvSQLReplayPath}}
+AdvSQLReplayIOP={{AdvSQLReplayIOP}}
+AdvSQLReplayLogMaxSize={{AdvSQLReplayLogMaxSize}}
+LogProfilerPath={{rest_LogProfilerPath}}
+StartSysInDB=1
+
+;DBAccess
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064885
+[DBAccess]
+Server= {{DBAccessServer}}
+Port={{dbaccess_port}}
+Database={{sgbd}}
+Alias={{alias}}
+PROTHEUSONLY=0
+
+;Drivers
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064839
+[Drivers]
+Active=TCP
+MultiProtocolPort={{MultiProtocolPort}}
+MultiProtocolPortSecure={{MultiProtocolPortSecure}}
+;Secure={{Secure}}
+
+;TCP
+;https://tdn.totvs.com/pages/viewpage.action?pageId=135495723
+[TCP]
+Type={{Type}}
+Port={{rest_tcp_port}}
+Ip={{ip_app}}
+
+;LicenseClient
+;https://tdn.totvs.com/pages/viewpage.action?pageId=244734923
+[LicenseClient]
+Server={{license_ip}}
+Port={{license_server_port}}
+
+;General
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064796
+[General]
+CHECKSPECIALKEY=0
+InstallPath= {{app_path}}
+ConsoleLog={{ConsoleLog}}
+ChangeEncodingBehavior={{ChangeEncodingBehavior}}
+InactiveTimeout={{InactiveTimeout}}
+CanAcceptDebugger={{CanAcceptDebugger}}
+CanAcceptLB={{CanAcceptLB}}
+CanAcceptMonitor={{CanAcceptMonitor}}
+CanRunJobs={{CanRunJobs}}
+CanAcceptRPC={{CanAcceptRPC}}
+DebugThreadUsedMemory={{DebugThreadUsedMemory}}
+FloatingPointPrecise={{FloatingPointPrecise}}
+IdeMessages={{IdeMessages}}
+ConsoleFile={{rest_consoleFile}}
+AsyncConsoleLog=0
+AsyncConsoleLog=0
+LogTimeStamp = {{LogTimeStamp}}
+ShowFullLog={{ShowFullLog}}
+ShowIPClient={{ShowIPClient}}
+SocketMessages={{SocketMessages}}
+;SSLRedirect={{SSLRedirect}}
+LatencyLog={{LatencyLog}}
+LatencyLogFile={{rest_latencyLogFile}}
+LogHttpFuncs= {{LogHttpFuncs}}
+MaxStringSize={{MaxStringSize}}
+WsdlStreamType={{WsdlStreamType}}
+SocketsDefaultIPV6={{SocketsDefaultIPV6}}
+ServerMemoryLimit={{ServerMemoryLimit}}
+
+;Service
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064864
+[Service]
+Name={{rest_name}}
+Displayname={{rest_displayname}}
+Description={{rest_description}}
+
+;TDS
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[TDS]
+ALLOWAPPLYPATCH={{ALLOWAPPLYPATCH}}
+ALLOWEDIT={{ALLOWEDIT}}
+ENABLEDISCONNECTUSER={{ENABLEDISCONNECTUSER}}
+ENABLESENDMESSAGE={{ENABLESENDMESSAGE}}
+ENABLEBLOCKNEWCONNECTION={{ENABLEBLOCKNEWCONNECTION}}
+ENABLESTOPSERVER={{ENABLESTOPSERVER}}
+
+;update
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064898
+[update]
+Enable={{ enable_update }}
+PathLinux={{update}}
+
+;SSLConfigure
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[SSLConfigure]
+Verbose = {{Verbose}}
+SSL2    = {{SSL2}}
+SSL3    = {{SSL3}}
+TLS1_0  = {{TLS1_0}}
+TLS1_1  = {{TLS1_1}}
+TLS1_2  = {{TLS1_2}}
+Bugs    = {{Bugs}}
+State   = {{State}}
+Debug   = {{Debug}}
+
+;WEBAPP
+;https://tdn.totvs.com/pages/viewpage.action?pageId=307834830
+[WEBAPP]
+Port={{rest_http_port}}
+EnvServer={{EnvServer}}
+LastMainProg={{LastMainProg}}
+MaxBodySize={{MaxBodySize}}
+MaxHeaderSize={{MaxHeaderSize}}
+MaxRequestTime={{MaxRequestTime}}
+
+[WEBAPP-HEADERS]
+Access-Control-Allow-Origin=*
+
+[HTTPV11]
+Enable=1
+Sockets=HTTPREST
+
+[HTTPREST]
+Port={{rest_port}}
+IPsBind=
+URIs=HTTPURI
+Security=1
+
+[HTTPURI]
+URL={{rest_url}}
+PrepareIn={{rest_prepare_in}}
+Instances={{rest_instances}}
+CORSEnable=1
+AllowOrigin=*
+
+[HTTPJOB]
+MAIN=HTTP_START
+ENVIRONMENT={{environment_name}}
+
+[ONSTART]
+jobs=HTTPJOB
+RefreshRate=30

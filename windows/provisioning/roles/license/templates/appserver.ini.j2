@@ -1,0 +1,87 @@
+[{{environment_name}}]
+SourcePath={{ license_source_path }}
+RootPath={{ license_root_path }}
+StartPath={{start_path}}
+RpoDb=SQLite
+RpoLanguage=PORTUGUESE
+RpoVersion=120
+LocalFiles=CTREE
+DBDataBase=SQLite
+DBAlias=SYSTEM
+DBServer=localhost
+startSysInDB=1
+TOPMemoMega=1
+FWLOGMSG_DEBUG=0
+FWFRAME_TRACELOG=0
+
+[DRIVERS]
+Active=TCP
+MultiProtocolPortSecure=0
+MultiProtocolPort=0
+
+[TCP]
+TYPE=TCPIP
+Port={{ license_tcp_port }}
+
+[LICENSESERVER]
+Enable=1
+Port=5555
+ShowStatus=0
+EnableNumber=1
+LicenseFile=lsinitialize.inf
+IPCGOTIMEOUT=45000
+IPCRETURNTIMEOUT=90000
+NUMBERVAL=1
+STATELESSREUSECONN=60
+
+[LICENSECLIENT]
+Server=LOCALHOST
+Port= {{ license_server_port }}
+Enable=1
+
+[GENERAL]
+BUILDKILLUSERS=1
+CONSOLELOG=1
+CONSOLE=1
+ConsoleFile={{license_consoleFile}}
+DebugThreadUsedmemory=0
+ThreadMemwarning=0
+MaxStringSize=500
+IPC_ActiveTimeOut=300
+MaxBucketCommitTime=5000
+ASyncConsoleLog=0
+
+;Service
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064864
+[Service]
+Name={{service_name}}
+Displayname={{service_name}}
+Description={{service_name}}
+
+[ONSTART]
+jobs=LSInit
+refreshRate=60
+
+[LSInit]
+Main=LSInitialize
+Environment={{environment_name}}
+
+;SSLConfigure
+;https://tdn.totvs.com/pages/viewpage.action?pageId=6064865
+[SSLConfigure]
+Verbose = {{Verbose}}
+SSL2    = {{SSL2}}
+SSL3    = {{SSL3}}
+TLS1_0  = {{TLS1_0}}
+TLS1_1  = {{TLS1_1}}
+TLS1_2  = {{TLS1_2}}
+Bugs    = {{Bugs}}
+State   = {{State}}
+Debug   = {{Debug}}
+SecondCertificateClient= {{ license_certs }}
+
+[WEBAPP]
+Port= {{ license_web_port }}
+HideParamsForm=1
+LastMainProg=TOTVSLSMONITOR
+EnvServer={{environment_name}}
